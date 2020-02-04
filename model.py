@@ -8,6 +8,7 @@ from flask_sqlalchemy import SQLAlchemy
 DB = SQLAlchemy()
 
 class Song( DB.model):
+
 	track_id = DB.Column( DB.String( 22), primary_key= True)
 	songName = DB.Column( DB.String( 50), nullable= False)
 	artistName = DB.Column( DB.String( 50), nullable= False)
@@ -27,10 +28,12 @@ class Song( DB.model):
 	popularity = DB.Column( DB.Integer, nullable= False)
 
 
+
 	def __repr__( self):
 		return '{} - {}'.format( self.artistName, self.songName)
 
 class User( DB.Model):
+
 	track_id = DB.Column( DB.String( 22), primary_key= True)
 
 	def __repr__( self):

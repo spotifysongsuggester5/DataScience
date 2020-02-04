@@ -40,6 +40,3 @@ user > inputs( track_id)    (^ up there)
 add that User.track_id to db > compare to Song.track_id to get all other fields
 run model to find similar songs
 export new track_ids OR Song.songName and Song.artistName
-
-
-"""
