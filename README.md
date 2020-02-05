@@ -11,7 +11,7 @@ And along with a 200 status, you will receive the object `{'artist_name': 'artis
 
 #### What happens in between the above input/output (WIP)
 
-- Internal `Spotify.db` database's Song table is populated from accompanying .csv
+- Internal `spotify.db` database's Song table is populated from accompanying .csv
 
 - Song table is filtered by received track_id or track_ids, to get songs' identifying metrics and characteristics
 
