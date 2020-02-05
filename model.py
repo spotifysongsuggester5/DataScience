@@ -7,7 +7,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 DB = SQLAlchemy()
 
-class Song( DB.model):
+class Song( DB.Model):
 	track_id = DB.Column( DB.String( 22), primary_key= True)
 	songName = DB.Column( DB.String( 50), nullable= False)
 	artistName = DB.Column( DB.String( 50), nullable= False)
@@ -19,7 +19,7 @@ class Song( DB.model):
 	musicalKey = DB.Column( DB.Integer, nullable= False)
 	liveness = DB.Column( DB.Numeric( 5, 4), nullable= False)
 	loudness = DB.Column( DB.Numeric( 5, 4), nullable= False)
-	mode = = DB.Column( DB.Integer, nullable= False)
+	mode = DB.Column( DB.Integer, nullable= False)
 	modulespeechiness = DB.Column( DB.Numeric( 5, 4), nullable= False)
 	tempo = DB.Column( DB.Numeric( 6, 3), nullable= False)
 	timeSig = DB.Column( DB.Integer, nullable= False)
