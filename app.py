@@ -13,11 +13,18 @@ app.config[ 'SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite3'
 app.config[ 'SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 DB.init_app( app)
 
+dfFileName = 'spotify2019.csv'
+
 
 def fillDB():
 	"""
+	Fill database with given CSV
 	"""
-	pass
+	engine = create_engine( 'sqlite:///spotify.db')
+	df = pd.read_csv( dfFileName)
+	df.to_sql( con= engine, index_label= 'id', 
+			   name= Song.__tablename__, if_exists= 'replace')
+
 
 
 def suggestSong():
@@ -27,15 +34,14 @@ def suggestSong():
 
 	return model.predict([[ ]])
 	"""
-
 	pass
 
 
 def exportSuggestion():
 	""" An example:
 	sendBack = {'suggestion': output}
-	send_back_dummy = {'dummy': 1}
-	send_back_input = {
+	sendBackDummy = {'dummy': 1}
+	sendBackInput = {
 		'track_id': track_id
 	}
 	"""
@@ -48,6 +54,9 @@ def root():
 	DB.drop_all()
 	DB.create_all()
 
+	fillDB()
+
+
 	# < For loop here, potentially > (if track ID(s) will be passed in a list)
 #	track_id = request.values[ 'track_id']
 
@@ -59,8 +68,13 @@ def root():
 	DB.session.add( track_id)
 	DB.commit()
 
-
-
+"""
+	return app.response_class( 
+		response= json.dumps( send_back),
+		status= 200,
+		mimetype= 'application/json'
+	)
+"""
 
 
 if __name__ == "__main__":
