@@ -7,6 +7,8 @@
 import pickle
 from flask import Flask, request, render_template
 from model import DB, Song, User
+from sqlalchemy import create_engine
+from sqlalchemy_utils import database_exists
 
 app = Flask( __name__)
 app.config[ 'SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite3'
@@ -14,13 +16,13 @@ app.config[ 'SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 DB.init_app( app)
 
 dfFileName = 'spotify2019.csv'
+engine = create_engine( 'sqlite:///spotify.db')
 
-
-def fillDB():
+def fillSongDB():
 	"""
-	Fill database with given CSV
+	Fill DB's Song table with given CSV
+		(Does not need to execute every time app is run?)
 	"""
-	engine = create_engine( 'sqlite:///spotify.db')
 	df = pd.read_csv( dfFileName)
 	df.to_sql( con= engine, index_label= 'id', 
 			   name= Song.__tablename__, if_exists= 'replace')
@@ -32,40 +34,44 @@ def suggestSong():
 	with open( 'model.pickle', 'rb') as mod:
 		model = pickle.load( mod)
 
-	return model.predict([[ ]])
+	songInput = Song.query.filter( Song.track_id == User.track_id)
+	return model.predict([[ songInput]])
 	"""
 	pass
 
 
 def exportSuggestion():
 	""" An example:
-	sendBack = {'suggestion': output}
-	sendBackDummy = {'dummy': 1}
-	sendBackInput = {
+	sendBack = {'suggestion': 'track_id'}
+	sendBackDummy = {'dummy': 1}		# minimal functionality for testing
+	sendBackInput = {					# verify input working as expected
 		'track_id': track_id
 	}
+
+	return sendBack
 	"""
 	pass
 
 
 
 @app.route( '/', methods= ['POST'])
-def root():
-	DB.drop_all()
-	DB.create_all()
+def main():
 
-	fillDB()
+	if database_exists( *engine.url):
+		DB.drop_all()
+		DB.create_all()
+
+		fillSongDB()
 
 
 	# < For loop here, potentially > (if track ID(s) will be passed in a list)
 #	track_id = request.values[ 'track_id']
 
 	lines = request.get_json( force= True)
-	track_id = lines[ 'track_id']
-	assert isinstance( track_id, str)
+	User.track_id = lines[ 'track_id']
+	assert isinstance( User.track_id, str)
 
-
-	DB.session.add( track_id)
+	DB.session.add( User.track_id)
 	DB.commit()
 
 """
@@ -78,7 +84,7 @@ def root():
 
 
 if __name__ == "__main__":
-	root()
+	main()
 
 
 """
