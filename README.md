@@ -4,8 +4,7 @@ Repo for the data science team
 
 ### Planned API usage (WIP)
 
-At the app's address `spotify-song-suggester-5.heroku.com`, along the appropriate route (currently pointed at `/`), please send the
-object `{'track_id': 'xxxxXxxxxXxxxxXxxxxXxx'}` (also known as Spotify ID, from Spotify's Web API: the 22-char, base-62 identifier that's unique for every song in Spotify's catalogue)
+At the app's address `spotify-song-suggester-5.heroku.com`, along the appropriate route (currently pointed at `/`), please send the object `{'track_id': 'xxxxXxxxxXxxxxXxxxxXxx'}` (also known as Spotify ID, from Spotify's Web API: the 22-char, base-62 identifier that's unique for every song in Spotify's catalogue)
 
 And along with a 200 status, you will receive the object `{'artist_name': 'artist name', 'song_name': 'song name'}`
 
@@ -23,5 +22,5 @@ And along with a 200 status, you will receive the object `{'artist_name': 'artis
 
 - Refer back to Song table, filtering by returned index_ids to get artist and song names
 
-- Build dictionary of filtered artist and song names to send back, along with vizualizations
+- Build dictionary/json-object of filtered artist and song names to send back, along with vizualizations
 
