@@ -30,10 +30,31 @@ def fillSongDB():
 			   name= Song.__tablename__, if_exists= 'replace')
 
 
+def parseInput():
+	""" USE THIS IF: json input has song_url and not track_id """
+	"""  """
+	# test_case
+	with open( 'test_in.json') as test:
+		lines = json.load( test)
+	#/test_case
+
+	for line in lines:
+		User.track_id = line[ 'song_url'][-22:]
+		if not isinstance( User.track_id, str):
+			raise ValueError( 'Inappropriate type: must be a valid Spotify track ID')
+		if rfind( "/") != -1:
+			raise ValueError( "Inappropriate type: Entry " + lines[line] + \
+				"'s ID ({}) is not a valid Spotify song ID".format( lines[line][ 'song_url'][-22:]))
+		DB.session.add( User.track_id)
+	DB.session.commit()
+
+
 def suggestSong():			# TODO: move to prediction.py?
 
-	with open( 'model.pickle', 'rb') as mod:
-		model = pickle.load( mod)
+#	with open( 'model.pickle', 'rb') as mod:
+#		model = pickle.load( mod)
+	with open( 'knn', 'rb') as pred:
+		model = pickle.load( pred)
 
 	songInput = Song.query.filter( Song.track_id == User.track_id)
 	return model.predict( [[songInput]])
