@@ -37,8 +37,11 @@ class Song( DB.Model):
 
 class User( DB.Model):
 
-	track_id = DB.Column( DB.String( 22), primary_key= True)
+	id = DB.Column( DB.Integer, primary_key= True)
+	track_id = DB.Column( DB.String( 22), nullable= False)
+	songName = DB.Column( DB.String( 50), nullable= False)
+	artistName = DB.Column( DB.String( 50), nullable= False)
 
 	def __repr__( self):
-		return '{}'.format( self.track_id)
+		return '{} - {}'.format( self.artistName, self.songName)
 

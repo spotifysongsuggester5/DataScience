@@ -4,6 +4,7 @@
 	based on acoustic similarities
 """
 
+import json
 import pickle
 from flask import Flask, request, render_template
 from model import DB, Song, User
@@ -20,7 +21,7 @@ engine = create_engine( 'sqlite:///spotify.db')
 
 def fillSongDB():
 	"""
-	Fill DB's Song table with given CSV
+	Fill db's Song table with given CSV
 		(Does not need to execute every time app is run?)
 	"""
 	df = pd.read_csv( dfFileName)
@@ -35,7 +36,7 @@ def suggestSong():			# TODO: move to prediction.py?
 		model = pickle.load( mod)
 
 	songInput = Song.query.filter( Song.track_id == User.track_id)
-	return model.predict([[ songInput]])
+	return model.predict( [[songInput]])
 
 
 

@@ -12,6 +12,7 @@ pandas = "*"
 spotipy = "*"
 sqlalchemy = "*"
 sqlalchemy-utils = "*"
+jsonify = "*"
 
 [requires]
 python_version = "3.7"
