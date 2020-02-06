@@ -10,10 +10,10 @@ from model import DB, Song, User
 from sqlalchemy import create_engine
 from sqlalchemy_utils import database_exists
 
-app = Flask( __name__)
-app.config[ 'SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite3'
-app.config[ 'SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-DB.init_app( app)
+APP = Flask( __name__)
+APP.config[ 'SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite3'
+APP.config[ 'SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+DB.init_app( APP)
 
 dfFileName = 'spotify2019.csv'
 engine = create_engine( 'sqlite:///spotify.db')
@@ -29,58 +29,62 @@ def fillSongDB():
 
 
 
-def suggestSong():
-	"""	An example:
+def suggestSong():			# TODO: move to prediction.py?
+
 	with open( 'model.pickle', 'rb') as mod:
 		model = pickle.load( mod)
 
 	songInput = Song.query.filter( Song.track_id == User.track_id)
 	return model.predict([[ songInput]])
-	"""
-	pass
+
+
 
 
 def exportSuggestion():
-	""" An example:
-	sendBack = {'suggestion': 'track_id'}
+
+#	< Does this need to be in a For loop? >
+#	sendBack = {'suggestion': 'track_id'}
+	sendBack = {'artists': {'test': 'artist1'},
+				'songs': {'another test': 'artist2'}
+	}
 	sendBackDummy = {'dummy': 1}		# minimal functionality for testing
 	sendBackInput = {					# verify input working as expected
 		'track_id': track_id
 	}
-
 	return sendBack
-	"""
-	pass
-
-
+	
 
 @app.route( '/', methods= ['POST'])
 def main():
 
-	if database_exists( *engine.url):
+	if database_exists( engine.url) == False:
+		"""if specified db doesn't exist, create and run function to populate"""
 		DB.drop_all()
 		DB.create_all()
-
 		fillSongDB()
 
 
-	# < For loop here, potentially > (if track ID(s) will be passed in a list)
-#	track_id = request.values[ 'track_id']
-
+#	< Alternative methods to get track id? > (depends on backend)
+#	lines = request.values[ 'track_id']
+#	lines = request.args.get( 'seed', 
+# 							  default= '5xTtaWoae3wi06K5WfVUUH',	# Haters gonna hate, hate, hate, hate, hate
+# 							  type= 'str')
 	lines = request.get_json( force= True)
-	User.track_id = lines[ 'track_id']
-	assert isinstance( User.track_id, str)
+	for line in lines:
+		User.track_id = lines[ 'track_id']
+		assert isinstance( User.track_id, str)
+		DB.session.add( User.track_id)
 
-	DB.session.add( User.track_id)
 	DB.commit()
 
-"""
-	return app.response_class( 
-		response= json.dumps( send_back),
+	suggestSong()
+
+	return APP.response_class( 
+		response= json.dumps( exportSuggestion()),
 		status= 200,
 		mimetype= 'application/json'
 	)
-"""
+
 
 
 if __name__ == "__main__":

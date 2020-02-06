@@ -10,6 +10,8 @@ flask = "*"
 flask-sqlalchemy = "*"
 pandas = "*"
 spotipy = "*"
+sqlalchemy = "*"
+sqlalchemy-utils = "*"
 
 [requires]
 python_version = "3.7"
