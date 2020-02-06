@@ -38,8 +38,9 @@ class User( DB.Model):
 
 	__tablename__ = 'User'
 
-	id = DB.Column( DB.Integer, primary_key= True)
-	track_id = DB.Column( DB.String( 22), unique= True, nullable= False)
+#	id = DB.Column( DB.Integer, primary_key= True)
+#	track_id = DB.Column( DB.String( 22), unique= True, nullable= False)
+	track_id = DB.Column( DB.String( 22), unique= True, nullable= False, primary_key= True)
 
 	def __repr__( self):
 		return 'track ID: {}'.format( self.track_id)

@@ -4,7 +4,7 @@
 	based on acoustic similarities
 """
 
-import jsonify
+import json
 import pickle
 from flask import Flask, request, render_template
 from model import DB, Song, User
@@ -39,14 +39,20 @@ def parseInput():
 	#/test_case
 
 	for line in lines:
-		User.track_id = line[ 'song_url'][-22:]
-		if not isinstance( User.track_id, str):
+		track = line[ 'song_url'][-22:]
+		
+		if not isinstance( track, str):
 			raise ValueError( 'Inappropriate type: must be a valid Spotify track ID')
-		if rfind( "/") != -1:
-			raise ValueError( "Inappropriate type: Entry " + lines[line] + \
-				"'s ID ({}) is not a valid Spotify song ID".format( lines[line][ 'song_url'][-22:]))
-		DB.session.add( User.track_id)
-	DB.session.commit()
+		if track.rfind( "/") != -1:
+			raise ValueError( "Inappropriate type: Entry " + \
+					line[ 'song_name'] + \
+				"'s ID ({}) is not a valid Spotify song ID".format( 
+					line[ 'song_url'][-22:])
+			)
+		trackList.append( track)
+
+#		DB.session.add( User.track_id)
+#	DB.commit()
 
 
 def suggestSong():			# TODO: move to prediction.py?
@@ -56,8 +62,9 @@ def suggestSong():			# TODO: move to prediction.py?
 	with open( 'knn', 'rb') as pred:
 		model = pickle.load( pred)
 
-	songInput = Song.query.filter( Song.track_id == User.track_id)
-	return model.predict( [[songInput]])
+	for track in tracklist:
+		songInput = Song.query.filter( Song.track_id == trackList)
+		return model.predict( [[songInput]])
 
 
 def exportSuggestion():
