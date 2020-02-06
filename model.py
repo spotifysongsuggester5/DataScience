@@ -30,21 +30,18 @@ class Song( DB.Model):
 	valence = DB.Column( DB.Numeric( 5, 4), nullable= False)
 	popularity = DB.Column( DB.Integer, nullable= False)
 
-
-
 	def __repr__( self):
 		return '{} - {}'.format( self.artistName, self.songName)
 
 
-"""		UNNECESSARY?
 class User( DB.Model):
+
+	__tablename__ = 'User'
 
 	id = DB.Column( DB.Integer, primary_key= True)
 	track_id = DB.Column( DB.String( 22), unique= True, nullable= False)
-	songName = DB.Column( DB.String( 50), nullable= False)
-	artistName = DB.Column( DB.String( 50), nullable= False)
 
 	def __repr__( self):
-		return '{} - {}'.format( self.artistName, self.songName)
-"""
+		return 'track ID: {}'.format( self.track_id)
+
 
