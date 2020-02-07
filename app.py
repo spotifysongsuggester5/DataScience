@@ -64,6 +64,8 @@ def parseInput():
 
 def suggestSong( trackList):
 
+	whatDoesThisDo = []
+
 	with open( 'knn', 'rb') as pred:
 		model = pickle.load( pred)
 
@@ -104,6 +106,8 @@ def suggestSong( trackList):
 		"""
 
 		whatDoesThisDo = model.predict( [[songData]])
+
+		return whatDoesThisDo
 
 
 def exportSuggestion():
