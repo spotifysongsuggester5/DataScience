@@ -38,6 +38,8 @@ def parseInput():
 		lines = json.load( test)
 	#/test_case
 
+	trackList = []
+
 	for line in lines:
 		track = line[ 'song_url'][-22:]
 		
@@ -62,7 +64,7 @@ def suggestSong():			# TODO: move to prediction.py?
 	with open( 'knn', 'rb') as pred:
 		model = pickle.load( pred)
 
-	for track in tracklist:
+	for track in trackList:
 		songInput = Song.query.filter( Song.track_id == trackList)
 		return model.predict( [[songInput]])
 
