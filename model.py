@@ -12,7 +12,7 @@ class Song( DB.Model):
 	__tablename__ = 'Song'
 
 	id = DB.Column( DB.Integer, primary_key= True)
-	track_id = DB.Column( DB.String( 22), nullable= False)
+	track_id = DB.Column( DB.String( 22), unique= True, nullable= False)
 	songName = DB.Column( DB.String( 50), nullable= False)
 	artistName = DB.Column( DB.String( 50), nullable= False)
 	acousticness = DB.Column( DB.Numeric( 5, 4), nullable= False)
@@ -30,15 +30,19 @@ class Song( DB.Model):
 	valence = DB.Column( DB.Numeric( 5, 4), nullable= False)
 	popularity = DB.Column( DB.Integer, nullable= False)
 
-
-
 	def __repr__( self):
 		return '{} - {}'.format( self.artistName, self.songName)
 
+
 class User( DB.Model):
 
-	track_id = DB.Column( DB.String( 22), primary_key= True)
+	__tablename__ = 'User'
+
+#	id = DB.Column( DB.Integer, primary_key= True)
+#	track_id = DB.Column( DB.String( 22), unique= True, nullable= False)
+	track_id = DB.Column( DB.String( 22), unique= True, nullable= False, primary_key= True)
 
 	def __repr__( self):
-		return '{}'.format( self.track_id)
+		return 'track ID: {}'.format( self.track_id)
+
 
