@@ -64,6 +64,8 @@ def parseInput():
 
 def suggestSong( trackList):
 
+	whatDoesThisDo = []
+
 	with open( 'knn', 'rb') as pred:
 		model = pickle.load( pred)
 
@@ -105,15 +107,17 @@ def suggestSong( trackList):
 
 		whatDoesThisDo = model.predict( [[songData]])
 
+		return whatDoesThisDo
 
-def exportSuggestion():
+
+# def exportSuggestion():
 
 #	< Does this need to be in a For loop? >
 #	sendBack = {'suggestion': 'track_id'}
-	sendBack = ['artists', {'test': 'artist1'},
-				'songs', {'another test': 'artist2'}
-	]
-	return sendBack
+#	sendBack = ['artists', {'test': 'artist1'},
+#				'songs', {'another test': 'artist2'}
+#	]
+#	return sendBack
 	
 def durationGraph():
 
@@ -149,11 +153,11 @@ def main():
 		# DB.commit()
 
 
-		suggestSong( parseInput())
+		export = suggestSong( parseInput())
 
 
 		return APP.response_class( 
-			response= json.dumps( exportSuggestion()),
+			response= json.dumps( export),
 			status= 200,
 			mimetype= 'application/json'
 		)
