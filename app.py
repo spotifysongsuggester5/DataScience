@@ -119,8 +119,8 @@ def suggestSong( trackList):
 #	]
 #	return sendBack
 	
-def durationGraph(data):
-
+def durationGraph(data = suggestsong(parseInput)):
+	
     fig = px.bar(data, x='song_name', y='duration')
     fig.show()
 
