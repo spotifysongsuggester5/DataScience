@@ -115,6 +115,11 @@ def exportSuggestion():
 	]
 	return sendBack
 	
+def durationGraph():
+
+    data = whatDoesThisDo
+    fig = px.bar(data, x='song_name', y='duration')
+    fig.show()
 
 def main():
 	"""	Create main instance of Song Suggester flask application """

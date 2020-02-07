@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "342d603f018726815795c301ca95250a39891332084173eee36837729afd868c"
+            "sha256": "ade635489875866d11393c681b3aba64fb8c2cbf8bb5898adb5cb016ec218e4e"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -172,6 +172,14 @@
             "index": "pypi",
             "version": "==1.0.1"
         },
+        "plotly": {
+            "hashes": [
+                "sha256:a19ed783bcf094e6207b3699ab261465bf3c7d299403678801de634bf17e2559",
+                "sha256:bb5271f648913cf330a0de4ede3084cda848f8ad8b080330a0678e1b21df97b0"
+            ],
+            "index": "pypi",
+            "version": "==4.5.0"
+        },
         "python-dateutil": {
             "hashes": [
                 "sha256:73ebfe9dbf22e832286dafa60473e4cd239f8592f699aa5adaf10050e6e1823c",
@@ -192,6 +200,12 @@
                 "sha256:9cf5292fcd0f598c671cfc1e0d7d1a7f13bb8085e9a590f48c010551dc6c4b31"
             ],
             "version": "==2.22.0"
+        },
+        "retrying": {
+            "hashes": [
+                "sha256:08c039560a6da2fe4f2c426d0766e284d3b736e355f8dd24b37367b0bb41973b"
+            ],
+            "version": "==1.3.3"
         },
         "scikit-learn": {
             "hashes": [
