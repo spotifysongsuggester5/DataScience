@@ -43,4 +43,3 @@ class User( DB.Model):
 	def __repr__( self):
 		return 'track ID: {}'.format( self.track_id)
 
-

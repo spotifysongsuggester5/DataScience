@@ -22,7 +22,6 @@ engine = create_engine( 'SQLALCHEMY_DATABASE_URI')
 curse = engine.connect()
 
 
-
 def fillSongDB():
 	"""
 	Fill db's Song table with given CSV
@@ -41,7 +40,7 @@ def parseInput():
 		lines = json.load( test)
 	#/test_case
 
-	trackList = []
+  trackList = []
 
 	for line in lines:
 		track = line[ 'song_url'][-22:]
@@ -156,6 +155,7 @@ def main():
 			status= 200,
 			mimetype= 'application/json'
 		)
+
 
 	# return APP
 
