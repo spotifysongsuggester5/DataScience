@@ -22,7 +22,6 @@ engine = create_engine( 'SQLALCHEMY_DATABASE_URI')
 curse = engine.connect()
 
 
-
 def fillSongDB():
 	"""
 	Fill db's Song table with given CSV
@@ -160,6 +159,7 @@ def main():
 			status= 200,
 			mimetype= 'application/json'
 		)
+
 
 	# return APP
 
