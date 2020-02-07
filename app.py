@@ -40,7 +40,7 @@ def parseInput():
 		lines = json.load( test)
 	#/test_case
 
-  trackList = []
+	trackList = []
 
 	for line in lines:
 		track = line[ 'song_url'][-22:]
@@ -118,6 +118,10 @@ def suggestSong( trackList):
 #	]
 #	return sendBack
 	
+def durationGraph(data = suggestsong(parseInput)):
+	
+    fig = px.bar(data, x='song_name', y='duration')
+    fig.show()
 
 def main():
 	"""	Create main instance of Song Suggester flask application """
