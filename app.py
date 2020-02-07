@@ -12,12 +12,15 @@ from sqlalchemy import create_engine
 from sqlalchemy_utils import database_exists
 
 APP = Flask( __name__)
-APP.config[ 'SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite3'
+APP.config[ 'SQLALCHEMY_DATABASE_URI'] = 'sqlite:///spotify.db'
 APP.config[ 'SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 DB.init_app( APP)
 
-dfFileName = 'spotify2019.csv'
-engine = create_engine( 'sqlite:///spotify.db')
+df_fileName = 'spotify2019.csv'
+# engine = create_engine( 'sqlite:///spotify.db')
+engine = create_engine( 'SQLALCHEMY_DATABASE_URI')
+curse = engine.connect()
+
 
 
 def fillSongDB():
@@ -25,7 +28,7 @@ def fillSongDB():
 	Fill db's Song table with given CSV
 		(Does not need to execute every time app is run?)
 	"""
-	df = pd.read_csv( dfFileName)
+	df = pd.read_csv( df_fileName)
 	df.to_sql( con= engine, index_label= 'id', 
 			   name= Song.__tablename__, if_exists= 'replace')
 
@@ -53,20 +56,54 @@ def parseInput():
 			)
 		trackList.append( track)
 
-#		DB.session.add( User.track_id)
-#	DB.commit()
+	# 	DB.session.add( User.track_id)
+	# DB.commit()
+
+	return trackList
 
 
-def suggestSong():			# TODO: move to prediction.py?
+def suggestSong( trackList):
 
-#	with open( 'model.pickle', 'rb') as mod:
-#		model = pickle.load( mod)
 	with open( 'knn', 'rb') as pred:
 		model = pickle.load( pred)
 
 	for track in trackList:
-		songInput = Song.query.filter( Song.track_id == trackList)
-		return model.predict( [[songInput]])
+		# songInput = Song.query.filter( Song.track_id == track)
+
+		t = text( "SELECT * FROM Song WHERE track_id IN (:trackID);")
+		songInput = curse.execute( t, trackID= track)
+		referenceData = songInput.fetchall()
+		referenceData = list( referenceData[0])
+
+		songData = referenceData
+		del songData[:4], songData[2], songData[4], songData[6], songData[8]
+
+		"""
+		drop cols 0,1,2,3,6,9,12,15 = 
+			id, a-name, t-id, t-name, 
+			duration, key, mode, t-sig,
+
+		keep cols 4,5,7,8,10,11,13,14,16, 17 = 
+			ac-ness, d-lity, nrg, inst, 
+			liven, loudn, spchn, tmpo, 
+			vale, pop
+
+		0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17
+		--------------------------------------------
+		X  X  X  X 
+		4  5  6  7  8  9 10 11 12 13 14 15 16 17
+			  X
+		4  5  7  8  9 10 11 12 13 14 15 16 17
+					X
+		4  5  7  8 10 11 12 13 14 15 16 17
+						 XX
+		4  5  7  9 10 11 13 14 15 16 17
+							   XX
+		4  5  7  9 10 11 13 14 16 17
+
+		"""
+
+		whatDoesThisDo = model.predict( [[songData]])
 
 
 def exportSuggestion():
@@ -83,34 +120,32 @@ def main():
 	"""	Create main instance of Song Suggester flask application """
 
 
-
-
-
-	@app.route( '/', methods= ['POST'])
+	@APP.route( '/', methods= ['POST'])
 	def root():
 
-#		if database_exists( engine.url) == False:
-#			"""if specified db doesn't exist, create and run function to populate"""
+		# if database_exists( engine.url) == False:
+		# 	"""if specified db doesn't exist, create and run function to populate"""
 		DB.drop_all()
 		DB.create_all()
 		fillSongDB()
 
-#		< Alternative methods to get track id? > (depends on backend, who has been MIA since Tuesday..)
-#		lines = request.values[ 'track_id']
-#		lines = request.args.get( 'seed', 
-#								default= '5xTtaWoae3wi06K5WfVUUH',	# Haters gonna hate, hate, hate, hate, hate
-# 								type= 'str')
+		# < Alternative methods to get track id? > (depends on backend, who has been MIA since Tuesday..)
+		# lines = request.values[ 'track_id']
+		# lines = request.args.get( 'seed', 
+		# 						default= '5xTtaWoae3wi06K5WfVUUH',	# Haters gonna hate, hate, hate, hate, hate
+		# 						type= 'str')
 
-		""" get input from front-end/json and save it to User table in db """
-		lines = request.get_json( force= True)
-		for line in lines:
-			User.track_id = lines[ 'track_id']
-			assert isinstance( User.track_id, str)
-			DB.session.add( User.track_id)
+		# """ get input from front-end/json and save it to User table in db """
+		# lines = request.get_json( force= True)
+		# for line in lines:
+		# 	User.track_id = lines[ 'track_id']
+		# 	assert isinstance( User.track_id, str)
+		# 	DB.session.add( User.track_id)
+		# DB.commit()
 
-		DB.commit()
 
-		suggestSong()
+		suggestSong( parseInput())
+
 
 		return APP.response_class( 
 			response= json.dumps( exportSuggestion()),
@@ -118,7 +153,7 @@ def main():
 			mimetype= 'application/json'
 		)
 
-	return APP
+	# return APP
 
 if __name__ == "__main__":
 	main()
