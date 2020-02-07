@@ -11,8 +11,8 @@ class Song( DB.Model):
 
 	__tablename__ = 'Song'
 
-	id = DB.Column( DB.Integer, primary_key= True)
-	track_id = DB.Column( DB.String( 22), unique= True, nullable= False)
+	id = DB.Column( DB.Integer, unique= True)
+	track_id = DB.Column( DB.String( 22), primary_key= True, nullable= False)
 	songName = DB.Column( DB.String( 50), nullable= False)
 	artistName = DB.Column( DB.String( 50), nullable= False)
 	acousticness = DB.Column( DB.Numeric( 5, 4), nullable= False)
@@ -38,8 +38,6 @@ class User( DB.Model):
 
 	__tablename__ = 'User'
 
-#	id = DB.Column( DB.Integer, primary_key= True)
-#	track_id = DB.Column( DB.String( 22), unique= True, nullable= False)
 	track_id = DB.Column( DB.String( 22), unique= True, nullable= False, primary_key= True)
 
 	def __repr__( self):
