@@ -115,9 +115,8 @@ def exportSuggestion():
 	]
 	return sendBack
 	
-def durationGraph():
+def durationGraph(data):
 
-    data = whatDoesThisDo
     fig = px.bar(data, x='song_name', y='duration')
     fig.show()
 
